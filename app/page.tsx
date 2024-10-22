@@ -43,7 +43,7 @@ export default async function HomePage() {
             (Artificial Intelligence) across various nations.
           </p>
           <div className="space-x-4">
-            <Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>
+            <Link href="#principles" className={cn(buttonVariants({ size: "lg" }))}>
               Browse
             </Link>
             <Link
