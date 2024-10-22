@@ -164,7 +164,7 @@ export function PrinciplesCountBarChartComponent({
   };
 
   return (
-    <Card>
+    <Card id="principles">
       <CardHeader className="flex flex-col items-center text-center">
         <CardTitle className="text-lg font-semibold">Principles Count</CardTitle>
         <CardDescription>
