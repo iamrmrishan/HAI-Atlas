@@ -115,18 +115,24 @@ const GeoMap: React.FC<GeoMapProps> = ({ data }) => {
 
   const handlePan = useCallback(
     (dx: number, dy: number) => {
-      const boundary = projectionScale / 2; // Dynamic boundary based on zoom level
+      // const boundary = projectionScale / 2; // Dynamic boundary based on zoom level
+      const boundary = projectionScale ;
+      const panFactor = 0.1; // Adjust this value to control pan step size (lower values = smaller steps)
+
+    const adjustedDx = dx * panFactor;
+    const adjustedDy = dy * panFactor;
+
       if (zoom < MAX_ZOOM) {
         // Limit panning when zoom is below max
         setTranslate((prev) => ({
-          x: Math.max(-boundary, Math.min(prev.x + dx, boundary)),
-          y: Math.max(-boundary, Math.min(prev.y + dy, boundary)),
+          x: Math.max(-boundary, Math.min(prev.x + adjustedDx, boundary)),
+          y: Math.max(-boundary, Math.min(prev.y + adjustedDy, boundary)),
         }));
       } else {
         // Allow boundless panning when zoom is at max
         setTranslate((prev) => ({
-          x: prev.x + dx,
-          y: prev.y + dy,
+          x: prev.x + adjustedDx,
+          y: prev.y + adjustedDx,
         }));
       }
     },
