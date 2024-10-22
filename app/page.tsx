@@ -58,7 +58,8 @@ export default async function HomePage() {
         </div>
       </section>
       <section id="geo-map">
-  <div className="container" style={{ width: "100%", height: "100vh" }}>
+  {/* <div className="container" style={{ width: "100%", height: "100vh" }}> */}
+  <div className="container w-full min-h-[30vh] sm:min-h-[30vh] md:min-h-[80vh] lg:min-h-[100vh]">
     <RotatableGeoMap data={geoData} />
   </div>
 </section>
@@ -68,7 +69,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-4 gap-4">
             <div className="col-span-4 md:col-span-2">
-              <PrinciplesCountBarChartComponent
+              <PrinciplesCountBarChartComponent              
                 principleCounts={principleCounts}
               />
             </div>
