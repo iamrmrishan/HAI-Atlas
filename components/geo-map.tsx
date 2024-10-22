@@ -61,7 +61,7 @@ const GeoMap: React.FC<GeoMapProps> = ({ data }) => {
   // const [zoom, setZoom] = useState(1);
   const [zoom, setZoom] = useState(1);
   const MIN_ZOOM = 1; // Set your desired minimum zoom level
-  const MAX_ZOOM = 5; // Set your desired maximum zoom level
+  const MAX_ZOOM = 3; // Set your desired maximum zoom level
   const scaleFactors = {
     extraSmall: 80, // For widths < 576
     small: 120, // For widths 576-767
@@ -115,28 +115,31 @@ const GeoMap: React.FC<GeoMapProps> = ({ data }) => {
 
   const handlePan = useCallback(
     (dx: number, dy: number) => {
-      // const boundary = projectionScale / 2; // Dynamic boundary based on zoom level
-      const boundary = projectionScale ;
-      const panFactor = 0.1; // Adjust this value to control pan step size (lower values = smaller steps)
-
-    const adjustedDx = dx * panFactor;
-    const adjustedDy = dy * panFactor;
-
-      if (zoom < MAX_ZOOM) {
-        // Limit panning when zoom is below max
-        setTranslate((prev) => ({
-          x: Math.max(-boundary, Math.min(prev.x + adjustedDx, boundary)),
-          y: Math.max(-boundary, Math.min(prev.y + adjustedDy, boundary)),
-        }));
-      } else {
-        // Allow boundless panning when zoom is at max
-        setTranslate((prev) => ({
-          x: prev.x + adjustedDx,
-          y: prev.y + adjustedDx,
-        }));
-      }
+      // Calculate the dimensions of the visible area of the map      
+      const visibleWidth = (window.innerWidth / zoom) ;
+      const visibleHeight = (window.innerHeight / zoom);      
+  
+      // Calculate the pan factors
+      const panFactor = 0.5; // Adjust this value to control pan step size (lower values = smaller steps)
+      const adjustedDx = dx * panFactor;
+      const adjustedDy = dy * panFactor;
+  
+      setTranslate((prev) => {
+        let newX = prev.x + adjustedDx;
+        let newY = prev.y + adjustedDy;
+  
+        // Calculate max and min boundaries for panning
+        const maxX = visibleWidth / 2;
+        const maxY = visibleHeight / 2;
+  
+        // Restrict panning within the defined boundaries
+        newX = Math.max(-maxX, Math.min(newX, maxX));
+        newY = Math.max(-maxY, Math.min(newY, maxY));
+  
+        return { x: newX, y: newY };
+      });
     },
-    [zoom, projectionScale]
+    [zoom, projectionScale, width]
   );
 
   const handleWheel = useCallback(
