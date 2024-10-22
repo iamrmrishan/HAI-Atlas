@@ -85,6 +85,20 @@ const GeoMap: React.FC<GeoMapProps> = ({ data }) => {
     }
   };
 
+  const getWidthForScale = (scale: number) => {
+    if (scale <= scaleFactors.extraSmall) {
+      return 576; // Extra small devices
+    } else if (scale <= scaleFactors.small) {
+      return 768; // Small Devices
+    } else if (scale <= scaleFactors.medium) {
+      return 992; // Medium Devices
+    } else if (scale <= scaleFactors.large) {
+      return 1200; // Large Devices
+    } else {
+      return 1536; // Extra Large Devices
+    }
+  };
+
   const adjustProjectionScale = (width: number, zoom: number) => {
     const baseScale = getScaleForWidth(width);
     return zoom * baseScale;
@@ -116,8 +130,11 @@ const GeoMap: React.FC<GeoMapProps> = ({ data }) => {
   const handlePan = useCallback(
     (dx: number, dy: number) => {
       // Calculate the dimensions of the visible area of the map      
-      const visibleWidth = (window.innerWidth / zoom) ;
-      const visibleHeight = (window.innerHeight / zoom);      
+      // const visibleWidth = (window.innerWidth / zoom) ;
+      // const visibleHeight = (window.innerHeight / zoom);      
+
+      const visibleWidth = (getWidthForScale(projectionScale) / zoom) ;
+      const visibleHeight = (window.innerHeight / zoom);            
   
       // Calculate the pan factors
       const panFactor = 0.5; // Adjust this value to control pan step size (lower values = smaller steps)
@@ -129,8 +146,8 @@ const GeoMap: React.FC<GeoMapProps> = ({ data }) => {
         let newY = prev.y + adjustedDy;
   
         // Calculate max and min boundaries for panning
-        const maxX = visibleWidth / 2;
-        const maxY = visibleHeight / 2;
+        const maxX = visibleWidth ;
+        const maxY = visibleHeight ;
   
         // Restrict panning within the defined boundaries
         newX = Math.max(-maxX, Math.min(newX, maxX));
